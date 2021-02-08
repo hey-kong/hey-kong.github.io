@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>Google Percolator - Iggie Wang&#039;s Cyberspace</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Iggie Wang&#039;s Cyberspace"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Iggie Wang&#039;s Cyberspace"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="背景Percolator 事务模型是 Google 内部用于 Web 索引更新的业务提出的分布式事务协议，构建在 BigTable 之上，总体来说就是一个经过优化的二阶段提交的实现。使用基于 Percolator 的增量处理系统代替原有的批处理索引系统后，Google 在处理同样数据量的文档时，将文档的平均搜索延时降低了50%。 2PC传统的 2PC 简单描述一下就是两步：  发起事务：事务管理器"><meta property="og:type" content="blog"><meta property="og:title" content="Google Percolator"><meta property="og:url" content="https://hey-kong.github.io/2021/02/09/Google-Percolator/"><meta property="og:site_name" content="Iggie Wang&#039;s Cyberspace"><meta property="og:description" content="背景Percolator 事务模型是 Google 内部用于 Web 索引更新的业务提出的分布式事务协议，构建在 BigTable 之上，总体来说就是一个经过优化的二阶段提交的实现。使用基于 Percolator 的增量处理系统代替原有的批处理索引系统后，Google 在处理同样数据量的文档时，将文档的平均搜索延时降低了50%。 2PC传统的 2PC 简单描述一下就是两步：  发起事务：事务管理器"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://hey-kong.github.io/2021/02/09/Google-Percolator/1.png"><meta property="og:image" content="https://hey-kong.github.io/2021/02/09/Google-Percolator/2.png"><meta property="og:image" content="https://hey-kong.github.io/2021/02/09/Google-Percolator/3.png"><meta property="og:image" content="https://hey-kong.github.io/2021/02/09/Google-Percolator/4.png"><meta property="og:image" content="https://hey-kong.github.io/2021/02/09/Google-Percolator/5.png"><meta property="og:image" content="https://hey-kong.github.io/2021/02/09/Google-Percolator/6.png"><meta property="og:image" content="https://hey-kong.github.io/2021/02/09/Google-Percolator/7.jpg"><meta property="article:published_time" content="2021-02-08T16:00:00.000Z"><meta property="article:modified_time" content="2021-02-08T19:48:00.033Z"><meta property="article:author" content="王亮"><meta property="article:tag" content="Database"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/2021/02/09/Google-Percolator/1.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://hey-kong.github.io/2021/02/09/Google-Percolator/"},"headline":"Iggie Wang's Cyberspace","image":["https://hey-kong.github.io/2021/02/09/Google-Percolator/1.png","https://hey-kong.github.io/2021/02/09/Google-Percolator/2.png","https://hey-kong.github.io/2021/02/09/Google-Percolator/3.png","https://hey-kong.github.io/2021/02/09/Google-Percolator/4.png","https://hey-kong.github.io/2021/02/09/Google-Percolator/5.png","https://hey-kong.github.io/2021/02/09/Google-Percolator/6.png","https://hey-kong.github.io/2021/02/09/Google-Percolator/7.jpg"],"datePublished":"2021-02-08T16:00:00.000Z","dateModified":"2021-02-08T19:48:00.033Z","author":{"@type":"Person","name":"王亮"},"description":"背景Percolator 事务模型是 Google 内部用于 Web 索引更新的业务提出的分布式事务协议，构建在 BigTable 之上，总体来说就是一个经过优化的二阶段提交的实现。使用基于 Percolator 的增量处理系统代替原有的批处理索引系统后，Google 在处理同样数据量的文档时，将文档的平均搜索延时降低了50%。 2PC传统的 2PC 简单描述一下就是两步：  发起事务：事务管理器"}</script><link rel="canonical" href="https://hey-kong.github.io/2021/02/09/Google-Percolator/"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/5.12.0/css/all.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css"><link rel="stylesheet"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.7.0/css/justifiedGallery.min.css"><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/pace/1.0.2/pace.min.js"></script><!--!--><!--!--><meta name="generator" content="Hexo 5.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/">Iggie Wang&#039;s Cyberspace</a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/2021/01/16/About-me">About</a></div><div class="navbar-end"><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2021-02-08T16:00:00.000Z" title="2021-2-9 00:00:00">2021-02-09</time>发表</span><span class="level-item"><time dateTime="2021-02-08T19:48:00.033Z" title="2021-2-9 03:48:00">2021-02-09</time>更新</span><span class="level-item">14 分钟读完 (大约2065个字)</span></div></div><h1 class="title is-3 is-size-4-mobile">Google Percolator</h1><div class="content"><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>Percolator 事务模型是 Google 内部用于 Web 索引更新的业务提出的分布式事务协议，构建在 BigTable 之上，总体来说就是一个经过优化的二阶段提交的实现。使用基于 Percolator 的增量处理系统代替原有的批处理索引系统后，Google 在处理同样数据量的文档时，将文档的平均搜索延时降低了50%。</p>
+<h2 id="2PC"><a href="#2PC" class="headerlink" title="2PC"></a>2PC</h2><p>传统的 2PC 简单描述一下就是两步：</p>
+<ol>
+<li>发起事务：事务管理器会发出 Prepare 请求，要求参与者记录日志，进行资源的检查和锁定</li>
+<li>确认/取消事务：当请求得到所有参与者的成功确认后，事务管理器会发出 Commit 请求，执行真正的操作；如果第一步中只要有一个执行者返回失败，则取消事务</li>
+</ol>
+<p>这样会有两个问题，一个就是<strong>单点故障</strong>：如果事务管理器发生故障，数据库会一直阻塞下去。尤其是在第二阶段发生故障的话，所有参与者还都处于锁定事务资源的状态中，从而无法继续完成事务操作；另一个就是存在<strong>数据不一致</strong>的情况：在第二阶段，当事务管理器向参与者发送 Commit 请求之后，发生了局部网络异常，导致只有部分参与者接收到请求，但是其他参与者未接到请求所以无法提交事务，整个系统就会出现数据不一致性的现象。</p>
+<h2 id="Percolator-事务流程"><a href="#Percolator-事务流程" class="headerlink" title="Percolator 事务流程"></a>Percolator 事务流程</h2><p>Percolator 事务是一个经过优化的 2PC 的实现，进行了一个二级锁的优化，也分为两个阶段：预写（Pre-write）和提交（Commit）。另外，所有启用了 Percolator 事务的表中，每一个 Column Family 都会预先增加两个列，分别是：</p>
+<ul>
+<li>lock：存储事务过程中的锁信息</li>
+<li>write：存储当前行可见（最近一次提交）的版本号</li>
+</ul>
+<p>另外，为了简化场景，假设存储用户数据的列只有一个，名为 data。</p>
+<h2 id="Pre-write"><a href="#Pre-write" class="headerlink" title="Pre-write"></a>Pre-write</h2><ol>
+<li><p>客户端从 TSO 获取时间戳，记为 start_ts，并向 Percolator Worker 发起 Pre-write 请求。</p>
+</li>
+<li><p>在该事务包含的所有写操作中选取一个作为主（primary）操作，其余的作为次（secondary）操作。主操作将作为整个事务的互斥点，标记事务的状态。</p>
+</li>
+<li><p>先预写主操作，成功后再预写次操作。在预写过程中，对每一个写操作都要执行检查：</p>
+<ul>
+<li>检查写入的行对应的 lock 列是否有锁，如果有，说明其他事务正在写，直接取消整个事务</li>
+<li>检查写入的行对应的 write 列版本号是否晚于 start_ts，如果是，说明有版本冲突，直接取消整个事务</li>
+</ul>
+</li>
+<li><p>检查通过后，以 start_ts 作为版本号将数据写入 data 列，对操作行加锁，即更新 lock 列的锁信息：主操作行的 lock 直接标为primary，次操作行的 lock 则标为主操作行的键和列名。不更新write列，亦即此时写入的数据仍然不可见。</p>
+</li>
+</ol>
+<h2 id="Commit"><a href="#Commit" class="headerlink" title="Commit"></a>Commit</h2><ol>
+<li><p>客户端从 TSO 获取时间戳，记为 commit_ts，并向 Percolator Worker 发起 Commit 请求。</p>
+</li>
+<li><p>检查主操作行对应的 lock 列所在的 primary 标记是否存在，如果不存在则失败，取消事务；如果存在则继续。</p>
+</li>
+<li><p>以 commit_ts 作为版本号，将 start_ts 更新到 write 列中。也就是说在本阶段完成后，预写阶段写入的数据将会可见。</p>
+</li>
+<li><p>对该行解锁，即删除 lock 列的 primary 信息。</p>
+</li>
+<li><p>若步骤 1~4 均成功，说明主操作行成功，代表整个事务实际上已经提交。接下来更新每个 secondary 即可，即重复步骤3、4的更新 write 列和清除 lock 列操作。secondary 的 commit 是可以异步进行的，只是在异步提交进行的过程中，如果此时有读请求，可能会需要做一下锁的清理工作。</p>
+</li>
+</ol>
+<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><p>银行转账，Bob 向 Joe 转账 7 元。该事务于 start_ts=7 开始，commit_ts=8 结束，Key 为 Bob 和 Joe 的行可能在不同的分片上。具体过程如下：</p>
+<ol>
+<li>首先查询 write 列获取最新时间戳数据，获取到 data@5，然后从 data 列里面获取时间戳为 5 的数据，初始状态下，Bob 的帐户下有 10，Joe 的帐户下有 2。</li>
+</ol>
+<img src="/2021/02/09/Google-Percolator/1.png" style="zoom:100%;">
+
+<ol start="2">
+<li>事务开始，获取 start_ts=7 作为当前事务的开始时间戳，将 Bob 行选为本事务的 primary，通过写入 lock 列锁定 Bob 的帐户，同时将数据 7:$3 写入到 data 列。</li>
+</ol>
+<img src="/2021/02/09/Google-Percolator/2.png" style="zoom:100%;">
+
+<ol start="3">
+<li>同样，使用 start_ts=7，将 Joe 改变后的余额写入到 data 列，当前操作作为 secondary，因此在 lock 列写入 7:<a href="mailto:&#x50;&#x72;&#x69;&#109;&#x61;&#114;&#x79;&#x40;&#x42;&#111;&#x62;&#x2e;&#x62;&#x61;&#x6c;">&#x50;&#x72;&#x69;&#109;&#x61;&#114;&#x79;&#x40;&#x42;&#111;&#x62;&#x2e;&#x62;&#x61;&#x6c;</a>（当失败时，能够快速定位到 primary 操作，并根据其状态异步清理）。</li>
+</ol>
+<img src="/2021/02/09/Google-Percolator/3.png" style="zoom:100%;">
+
+<ol start="4">
+<li>事务带着当前时间戳 commit_ts=8 进入 Commit 阶段：删除 primary 所在的 lock，并在 write 列中写入以提交时间戳作为版本号指向数据存储的一个指针 data@7。至此，读请求过来时将看到 Bob 的余额为 3。</li>
+</ol>
+<img src="/2021/02/09/Google-Percolator/4.png" style="zoom:100%;">
+
+<ol start="5">
+<li>同样，使用 commit_ts=8，依次在 secondary 操作项中写入 write 列并清理锁。</li>
+</ol>
+<img src="/2021/02/09/Google-Percolator/5.png" style="zoom:100%;">
+
+<ol start="6">
+<li>至此，整个当前 Percolator 事务已完成。</li>
+</ol>
+<img src="/2021/02/09/Google-Percolator/6.png" style="zoom:100%;">
+
+<h2 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h2><p>相比 2PC 存在的问题，来看看 Percolator 事务模型有哪些改进。</p>
+<ol>
+<li><p>单点故障<br>Percolator 通过日志和异步线程的方式弱化了这个问题。一是，Percolator 引入的异步线程可以在事务管理器宕机后，回滚各个分片上的事务，提供了善后手段，不会让分片上被占用的资源无法释放。二是，事务管理器可以用记录日志的方式使自身无状态化，日志通过共识算法同时保存在系统的多个节点上。这样，事务管理器宕机后，可以在其他节点启动新的事务管理器，基于日志恢复事务操作。</p>
+</li>
+<li><p>数据不一致<br>2PC 的一致性问题主要缘自第二阶段，不能确保事务管理器与多个参与者的通讯始终正常。但在 Percolator 的第二阶段，事务管理器只需要与 primary 操作所在的一个节点通讯，这个 Commit 操作本身就是原子的。所以，事务的状态自然也是原子的，一致性问题被完美解决了。</p>
+</li>
+</ol>
+<h2 id="Snapshot-Isolation"><a href="#Snapshot-Isolation" class="headerlink" title="Snapshot Isolation"></a>Snapshot Isolation</h2><p>传统关系型数据库中定义的隔离级别有4种（RU、RC、RR、S），而 Percolator 事务模型提供的隔离级别是快照隔离（Snapshot Isolation, SI），它也是与 MVCC 相辅相成的。SI的优点是：</p>
+<ul>
+<li>对于读操作，保证能够从时间戳/版本号指定的稳定快照获取，不会发生幻读</li>
+<li>对于写操作，保证在多个事务并发写同一条记录时，最多只有一个会提交成功</li>
+</ul>
+<img src="/2021/02/09/Google-Percolator/7.jpg" style="zoom:100%;">
+
+<p>如图，基于快照隔离的事务，开始于 start timestamp（图内为小空格），结束于 commit timestamp（图内为小黑球）。本例包含以下信息：</p>
+<ol>
+<li>txn_2 不能看到 txn_1 的提交信息，因为 txn_2 的开始时间戳 start timestamp 小于 txn_1 的提交时间戳 commit timestamp</li>
+<li>txn_3 可以看到 txn_2 和 txn_1 的提交信息</li>
+<li>txn_1 和 txn_2 并发执行：如果它们对同一条记录进行写入，至少有一个会失败</li>
+</ol>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li>Peng D, Dabek F, Inc G . “Large-scale Incremental Processing Using Distributed Transactions and Notifications” (2010).</li>
+</ol>
+</div><div class="article-licensing box"><div class="licensing-title"><p>Google Percolator</p><p><a href="https://hey-kong.github.io/2021/02/09/Google-Percolator/">https://hey-kong.github.io/2021/02/09/Google-Percolator/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>王亮</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2021-02-09</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2021-02-09</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a><a class="icon" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a><a class="icon" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/Database/">Database</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2021/02/07/Learning-to-Optimize-Join-Queries-With-Deep-Reinforcement-Learning/"><span class="level-item">Learning to Optimize Join Queries With Deep Reinforcement Learning</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="/img/dog.png" alt="Iggie Wang (王亮)"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">Iggie Wang (王亮)</p><p class="is-size-6 is-block">CS, Wuhan University</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>Wuhan, China</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives"><p class="title">8</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分类</p><a href="/categories"><p class="title">0</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">标签</p><a href="/tags"><p class="title">4</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/hey-kong" target="_blank" rel="noopener">关注我</a></div></div></div><!--!--><div class="card widget" data-type="links"><div class="card-content"><div class="menu"><h3 class="menu-label">链接</h3><ul class="menu-list"><li><a class="level is-mobile" href="https://github.com/hey-kong" target="_blank" rel="noopener"><span class="level-left"><span class="level-item">Github</span></span><span class="level-right"><span class="level-item tag">github.com</span></span></a></li><li><a class="level is-mobile" href="iggiewang@gmail.com" target="_blank" rel="noopener"><span class="level-left"><span class="level-item">Email</span></span><span class="level-right"><span class="level-item tag">iggiewang@gmail.com</span></span></a></li></ul></div></div></div><!--!--><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-02-08T16:00:00.000Z">2021-02-09</time></p><p class="title"><a href="/2021/02/09/Google-Percolator/">Google Percolator</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-02-07T04:30:57.000Z">2021-02-07</time></p><p class="title"><a href="/2021/02/07/Learning-to-Optimize-Join-Queries-With-Deep-Reinforcement-Learning/">Learning to Optimize Join Queries With Deep Reinforcement Learning</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-01-30T07:26:08.000Z">2021-01-30</time></p><p class="title"><a href="/2021/01/30/Google-File-System/">Google File System</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-01-21T07:00:00.000Z">2021-01-21</time></p><p class="title"><a href="/2021/01/21/Attack-Lab/">Attack Lab</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-01-21T00:00:00.000Z">2021-01-21</time></p><p class="title"><a href="/2021/01/21/Bomb-Lab/">Bomb Lab</a></p></div></article></div></div><div class="card widget" data-type="archives"><div class="card-content"><div class="menu"><h3 class="menu-label">归档</h3><ul class="menu-list"><li><a class="level is-mobile" href="/archives/2021/02/"><span class="level-start"><span class="level-item">二月 2021</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/archives/2021/01/"><span class="level-start"><span class="level-item">一月 2021</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li></ul></div></div></div><div class="card widget" data-type="tags"><div class="card-content"><div class="menu"><h3 class="menu-label">标签</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/CSAPP/"><span class="tag">CSAPP</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Database/"><span class="tag">Database</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/File-System/"><span class="tag">File System</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Rocksdb/"><span class="tag">Rocksdb</span><span class="tag">2</span></a></div></div></div></div></div><div class="card widget" data-type="subscribe-email"><div class="card-content"><div class="menu"><h3 class="menu-label">订阅更新</h3><form action="https://feedburner.google.com/fb/a/mailverify" method="post" target="popupwindow" onsubmit="window.open(&#039;https://feedburner.google.com/fb/a/mailverify?uri=&#039;,&#039;popupwindow&#039;,&#039;scrollbars=yes,width=550,height=520&#039;);return true"><input type="hidden" value="" name="uri"><input type="hidden" name="loc" value="en_US"><div class="field has-addons"><div class="control has-icons-left is-expanded"><input class="input" name="email" type="email" placeholder="Email"><span class="icon is-small is-left"><i class="fas fa-envelope"></i></span></div><div class="control"><input class="button" type="submit" value="订阅"></div></div></form></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/">Iggie Wang&#039;s Cyberspace</a><p class="is-size-7"><span>&copy; 2021 王亮</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p><a class="is-block mb-2" target="_blank" rel="noopener" href="http://beian.miit.gov.cn/">湘ICP备2021001315号</a></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-CN");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.6.8/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.7.0/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>
