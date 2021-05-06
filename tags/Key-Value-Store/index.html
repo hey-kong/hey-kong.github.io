@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>标签: Key-Value Store - Iggie Wang&#039;s Cyberspace</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Iggie Wang&#039;s Cyberspace"><meta name="msapplication-TileImage" content="/img/dog.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Iggie Wang&#039;s Cyberspace"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta property="og:type" content="blog"><meta property="og:title" content="Iggie Wang&#039;s Cyberspace"><meta property="og:url" content="https://hey-kong.github.io/"><meta property="og:site_name" content="Iggie Wang&#039;s Cyberspace"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://hey-kong.github.io/img/og_image.png"><meta property="article:author" content="王亮"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://hey-kong.github.io"},"headline":"Iggie Wang's Cyberspace","image":["https://hey-kong.github.io/img/og_image.png"],"author":{"@type":"Person","name":"王亮"},"description":""}</script><link rel="icon" href="/img/dog.png"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/5.12.0/css/all.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css"><link rel="stylesheet"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.7.0/css/justifiedGallery.min.css"><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/pace/1.0.2/pace.min.js"></script><!--!--><!--!--><meta name="generator" content="Hexo 5.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/">Iggie Wang&#039;s Cyberspace</a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/2021/01/16/About-me">About</a></div><div class="navbar-end"><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><div class="card-content"><nav class="breadcrumb" aria-label="breadcrumbs"><ul><li><a href="/tags">标签</a></li><li class="is-active"><a href="#" aria-current="page">Key-Value Store</a></li></ul></nav></div></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2021-05-06T06:03:34.000Z" title="2021-5-6 14:03:34">2021-05-06</time>发表</span><span class="level-item"><time dateTime="2021-05-06T10:55:24.193Z" title="2021-5-6 18:55:24">2021-05-06</time>更新</span><span class="level-item">11 分钟读完 (大约1575个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2021/05/06/WiscKey-Separating-Keys-from-Values-in-SSD-conscious-Storage/">WiscKey: Separating Keys from Values in SSD-conscious Storage</a></h1><div class="content"><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><h3 id="读写放大"><a href="#读写放大" class="headerlink" title="读写放大"></a>读写放大</h3><p>LSM-Tree key-value 存储存在读写放大的问题，例如对于LevelDB来说：</p>
+<ul>
+<li><p>写放大：假如每一层的大小是上一层的 10 倍，那么当把 i-1 层中的一个文件合并到 i 层中时，LevelDB 需要读取 i 层中的文件的数量多达 10 个，排序后再将他们写回到 i 层中去。所以这个时候的写放大是 10。对于一个很大的数据集，生成一个新的 SSTable 文件可能会导致 L0-L6 中相邻层之间发生合并操作，这个时候的写放大就是50（L1-L6中每一层是10）。</p>
+</li>
+<li><p>读放大：(1) 查找一个 key-value 对时，LevelDB 可能需要在多个层中去查找。在最坏的情况下，LevelDB 在 L0 中需要查找 8 个文件，在 L1-L6 每层中需要查找 1 个文件，累计就需要查找 14 个文件。(2) 在一个 SSTable 文件中查找一个 key-value 对时，LevelDB 需要读取该文件的多个元数据块。所以实际读取的数据量应该是：<code>index block + bloom-filter blocks + data block</code>。例如，当查找 1KB 的 key-value 对时，LevelDB 需要读取 16KB 的 index block，4KB的 bloom-filter block 和 4KB 的 data block，总共要读取 24 KB 的数据。在最差的情况下需要读取 14 个 SSTable 文件，所以这个时候的写放大就是 24*14=336。较小的 key-value 对会带来更高的读放大。</p>
+</li>
+</ul>
+<p>WiscKey 论文中针对 LevelDB 测试的读写放大数据：</p>
+<div align="center">
+<img src="/2021/05/06/WiscKey-Separating-Keys-from-Values-in-SSD-conscious-Storage/1.png" style="zoom:100%;">
+</div>
+
+<h3 id="存储硬件"><a href="#存储硬件" class="headerlink" title="存储硬件"></a>存储硬件</h3><p>在 SSD 上，顺序和随机读写性能差异不大。对于写操作而言，由于随机写会对 SSD 的寿命造成影响，顺序写的特性应该保留，对于读操作来说，顺序读和随机读的性能测试如下图所示：</p>
+<div align="center">
+<img src="/2021/05/06/WiscKey-Separating-Keys-from-Values-in-SSD-conscious-Storage/2.png" style="zoom:100%;">
+</div>
+
+<p>每次请求数据的 size 越大，SSD 的随机读与顺序读差距越小，并发数越大，SSD 的随机读与顺序读差距也越小。</p>
+<h2 id="WiscKey"><a href="#WiscKey" class="headerlink" title="WiscKey"></a>WiscKey</h2><p>WiscKey 包括四个关键思想：</p>
+<p>(1) KV 分离，只有 key 在 LSM-Tree 上。<br>(2) 在 KV 分离后，value 采用顺序追加写，不保序。因此范围查询中，WiscKey 使用并行 SSD 设备的随机读特性查询 value。<br>(3) 使用 crash-consistency 和 garbage-collection 有效管理 value log。<br>(4) 通过删除 LSM-Tree 日志而不牺牲一致性来优化性能。</p>
+<h3 id="KV-分离"><a href="#KV-分离" class="headerlink" title="KV 分离"></a>KV 分离</h3><div align="center">
+<img src="/2021/05/06/WiscKey-Separating-Keys-from-Values-in-SSD-conscious-Storage/3.png" style="zoom:100%;">
+</div>
+
+<p>KV 分离的设计要点如下：</p>
+<ul>
+<li>key 存在 LSM-Tree 上。</li>
+<li>value 存在单独的 value log 中。</li>
+<li>插入/更新数据的时候，首先将 value 追加到value log，然后将 key 插入 LSM-Tree 中。</li>
+<li>删除数据的时候，只是将 key 在 LSM-Tree 中删除，value log 的数据不需要改变，因为 WiscKey 会有垃圾回收机制处理对应的 value。</li>
+<li>读取数据时，先读 LSM-Tree，然后读 value log。</li>
+</ul>
+<h3 id="KV-分离对应的-Challenges"><a href="#KV-分离对应的-Challenges" class="headerlink" title="KV 分离对应的 Challenges"></a>KV 分离对应的 Challenges</h3><h4 id="Parallel-Range-Query"><a href="#Parallel-Range-Query" class="headerlink" title="Parallel Range Query"></a>Parallel Range Query</h4><ol>
+<li>范围查询时，WiscKey 从 LSM-Tree 中读取多个 key 的元数据信息 &lt;key, address&gt;。</li>
+<li>将这些 &lt;key, address&gt; 放入队列。</li>
+<li>预读线程（默认32个）会从队列中获取 value 的地址，然后并行读取 value 数据。</li>
+</ol>
+<h4 id="Garbage-Collection"><a href="#Garbage-Collection" class="headerlink" title="Garbage Collection"></a>Garbage Collection</h4><div align="center">
+<img src="/2021/05/06/WiscKey-Separating-Keys-from-Values-in-SSD-conscious-Storage/4.png" style="zoom:100%;">
+</div>
+
+<p>Value log 结构如图所示，其由 value_entry 组成，每个value_entry 是一个四元组 <code>(key size, value size, key, value)</code>。另外，Value log 有两个指针 head 和 tail，tail 指向 Value log 的起点；head 指向文件的尾部，所有新的数据都将追加到 head 位置。</p>
+<p>垃圾回收时，线程将从 tail 指向的位置开始，每次读取一个 chunk 的数据（比如几MB），对于 chunk 中的每一个 value_entry，在 LSM-Tree 中查找 key 以便判断该 value_entry 是否仍然有效。如果有效，则将该条目追加到 head 指针指向的位置，并且需要更新 LSM-Tree 的记录，因为 value 的地址已经变了；如果无效，则将其舍弃。</p>
+<p>同时，为了避免出现数据不一致（如在垃圾回收过程中发生了 crash），需要保证在释放对应的存储空间之前追加写入的新的有效 value 和新的 tail 指针持久化到了设备上。具体的步骤如下：</p>
+<ul>
+<li>垃圾回收在将 value 追加到 vLog 之后，在 vLog 上调用 fsync()</li>
+<li>同步地将新的 value 地址和 tail 指针地址写入到 LSM-Tree 中。（tail 指针的存储形式为 <code>&lt;‘‘tail’’, tail-vLog-offset&gt;</code>）</li>
+<li>最后回收 vLog 旧的数据空间</li>
+</ul>
+<h4 id="Crash-Consistency"><a href="#Crash-Consistency" class="headerlink" title="Crash Consistency"></a>Crash Consistency</h4><ol>
+<li>如果不能在 LSM-Tree 中查询到对应的 key，那么处理方式和传统的 LSM-Tree 一样，返回空或者 key 不存在，即便其 value 已经写入到了 vLog 文件中，也会对其进行垃圾回收。</li>
+<li>如果 LSM-Tree 中存在要查询的 Key，则会进行校验。校验首先校验从 LSM-Tree 中查询到的 value 地址信息是否在有效的 vLog 文件范围内；其次校验该地址对应的 value 上存取的 key 和要查询的 key 是否一致。如果校验失败，则删除 LSM-Tree 中相应 key，并返回 key 不存在。</li>
+<li>另外，还可以引入 magic number 或 checksum 来校验 key 和 value 是否匹配。</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>WiscKey 基于 LevelDB，设计了一个针对 SSD 进行优化的持久化 KV 存储方案，它的核心思想就是将 key 和 value 分离，key 存储在 LSM-Tree 中，value 存储在 value log 中，保留了 LSM-Tree 的优势，减少读写放大，发挥了 SSD 顺序写与并行随机读性能好的优势，但在小 value 场景以及大数据集范围查询下，WiscKey 的性能比 LevelDB 差。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li>Lu L, Pillai T S, Arpaci-Dusseau A C, et al. WiscKey: separating keys from values in SSD-conscious storage[C] 14th USENIX Conference on File and Storage Technologies (FAST 16). 2016: 133-148.</li>
+<li><a target="_blank" rel="noopener" href="http://cighao.com/2016/08/13/leveldb-source-analysis-01-introduction/">LevelDB 源码分析（一）：简介</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/30953751">WiscKey: Separating Keys from Values in SSD-conscious Storage</a></li>
+</ol>
+</div></article></div></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="/img/dog.png" alt="Iggie Wang (王亮)"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">Iggie Wang (王亮)</p><p class="is-size-6 is-block">CS, Wuhan University</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>Wuhan, China</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives"><p class="title">14</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分类</p><a href="/categories"><p class="title">0</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">标签</p><a href="/tags"><p class="title">6</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/hey-kong" target="_blank" rel="noopener">关注我</a></div></div></div><!--!--><div class="card widget" data-type="links"><div class="card-content"><div class="menu"><h3 class="menu-label">链接</h3><ul class="menu-list"><li><a class="level is-mobile" href="https://github.com/hey-kong" target="_blank" rel="noopener"><span class="level-left"><span class="level-item">Github</span></span><span class="level-right"><span class="level-item tag">github.com</span></span></a></li><li><a class="level is-mobile" href="iggiewang@gmail.com" target="_blank" rel="noopener"><span class="level-left"><span class="level-item">Email</span></span><span class="level-right"><span class="level-item tag">iggiewang@gmail.com</span></span></a></li></ul></div></div></div><!--!--><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-05-06T06:03:34.000Z">2021-05-06</time></p><p class="title"><a href="/2021/05/06/WiscKey-Separating-Keys-from-Values-in-SSD-conscious-Storage/">WiscKey: Separating Keys from Values in SSD-conscious Storage</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-04-05T08:33:37.000Z">2021-04-05</time></p><p class="title"><a href="/2021/04/05/RocksDB-WriteImpl-%E6%B5%81%E7%A8%8B/">RocksDB WriteImpl 流程</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-03-28T07:45:42.000Z">2021-03-28</time></p><p class="title"><a href="/2021/03/28/Vectorization-vs-Compilation-in-Query-Execution/">Vectorization vs. Compilation in Query Execution</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-02-21T08:28:03.000Z">2021-02-21</time></p><p class="title"><a href="/2021/02/21/%E7%BC%93%E5%AD%98%E8%AE%BE%E8%AE%A1/">缓存设计</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-02-16T03:53:12.000Z">2021-02-16</time></p><p class="title"><a href="/2021/02/16/TiDB-%E6%9E%B6%E6%9E%84/">TiDB 架构</a></p></div></article></div></div><div class="card widget" data-type="archives"><div class="card-content"><div class="menu"><h3 class="menu-label">归档</h3><ul class="menu-list"><li><a class="level is-mobile" href="/archives/2021/05/"><span class="level-start"><span class="level-item">五月 2021</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2021/04/"><span class="level-start"><span class="level-item">四月 2021</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2021/03/"><span class="level-start"><span class="level-item">三月 2021</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2021/02/"><span class="level-start"><span class="level-item">二月 2021</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/archives/2021/01/"><span class="level-start"><span class="level-item">一月 2021</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li></ul></div></div></div><div class="card widget" data-type="tags"><div class="card-content"><div class="menu"><h3 class="menu-label">标签</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/CSAPP/"><span class="tag">CSAPP</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Cache/"><span class="tag">Cache</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Database/"><span class="tag">Database</span><span class="tag">5</span></a></div><div class="control"><a class="tags has-addons" href="/tags/File-System/"><span class="tag">File System</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Key-Value-Store/"><span class="tag">Key-Value Store</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Rocksdb/"><span class="tag">Rocksdb</span><span class="tag">3</span></a></div></div></div></div></div><div class="card widget" data-type="subscribe-email"><div class="card-content"><div class="menu"><h3 class="menu-label">订阅更新</h3><form action="https://feedburner.google.com/fb/a/mailverify" method="post" target="popupwindow" onsubmit="window.open(&#039;https://feedburner.google.com/fb/a/mailverify?uri=&#039;,&#039;popupwindow&#039;,&#039;scrollbars=yes,width=550,height=520&#039;);return true"><input type="hidden" value="" name="uri"><input type="hidden" name="loc" value="en_US"><div class="field has-addons"><div class="control has-icons-left is-expanded"><input class="input" name="email" type="email" placeholder="Email"><span class="icon is-small is-left"><i class="fas fa-envelope"></i></span></div><div class="control"><input class="button" type="submit" value="订阅"></div></div></form></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/">Iggie Wang&#039;s Cyberspace</a><p class="is-size-7"><span>&copy; 2021 王亮</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p><a class="is-block mb-2" target="_blank" rel="noopener" href="http://beian.miit.gov.cn/">湘ICP备2021001315号</a></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-CN");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.6.8/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.7.0/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>
