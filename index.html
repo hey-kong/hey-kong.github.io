@@ -1,5 +1,90 @@
 <!doctype html>
-<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>Iggie Wang&#039;s Cyberspace</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Iggie Wang&#039;s Cyberspace"><meta name="msapplication-TileImage" content="/img/dog.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Iggie Wang&#039;s Cyberspace"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta property="og:type" content="blog"><meta property="og:title" content="Iggie Wang&#039;s Cyberspace"><meta property="og:url" content="https://hey-kong.github.io/"><meta property="og:site_name" content="Iggie Wang&#039;s Cyberspace"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://hey-kong.github.io/img/og_image.png"><meta property="article:author" content="王亮"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://hey-kong.github.io"},"headline":"Iggie Wang's Cyberspace","image":["https://hey-kong.github.io/img/og_image.png"],"author":{"@type":"Person","name":"王亮"},"description":""}</script><link rel="icon" href="/img/dog.png"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/5.12.0/css/all.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css"><link rel="stylesheet"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.7.0/css/justifiedGallery.min.css"><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/pace/1.0.2/pace.min.js"></script><!--!--><!--!--><meta name="generator" content="Hexo 5.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/">Iggie Wang&#039;s Cyberspace</a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item is-active" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/2021/01/16/About-me">About</a></div><div class="navbar-end"><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2021-08-09T05:19:49.000Z" title="2021-8-9 13:19:49">2021-08-09</time>发表</span><span class="level-item"><time dateTime="2021-08-09T09:07:42.682Z" title="2021-8-9 17:07:42">2021-08-09</time>更新</span><span class="level-item">16 分钟读完 (大约2373个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2021/08/09/Octopus-an-RDMA-enabled-Distributed-Persistent-Memory-File-System/">Octopus: an RDMA-enabled Distributed Persistent Memory File System</a></h1><div class="content"><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Octopus 通过 NVM + RDMA 实现了分布式文件系统，主要贡献总结如下：</p>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>Iggie Wang&#039;s Cyberspace</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Iggie Wang&#039;s Cyberspace"><meta name="msapplication-TileImage" content="/img/dog.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Iggie Wang&#039;s Cyberspace"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta property="og:type" content="blog"><meta property="og:title" content="Iggie Wang&#039;s Cyberspace"><meta property="og:url" content="https://hey-kong.github.io/"><meta property="og:site_name" content="Iggie Wang&#039;s Cyberspace"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://hey-kong.github.io/img/og_image.png"><meta property="article:author" content="王亮"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://hey-kong.github.io"},"headline":"Iggie Wang's Cyberspace","image":["https://hey-kong.github.io/img/og_image.png"],"author":{"@type":"Person","name":"王亮"},"description":""}</script><link rel="icon" href="/img/dog.png"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/5.12.0/css/all.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css"><link rel="stylesheet"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.7.0/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/pace/1.0.2/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/">Iggie Wang&#039;s Cyberspace</a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item is-active" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/2021/01/16/About-me">About</a></div><div class="navbar-end"><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2021-09-20T06:13:26.000Z" title="2021-9-20 14:13:26">2021-09-20</time>发表</span><span class="level-item"><time dateTime="2021-09-20T09:38:26.391Z" title="2021-9-20 17:38:26">2021-09-20</time>更新</span><span class="level-item">10 分钟读完 (大约1454个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2021/09/20/From-WiscKey-to-Bourbon-A-Learned-Index-for-Log-Structured-Merge-Trees/">From WiscKey to Bourbon: A Learned Index for Log-Structured Merge Trees</a></h1><div class="content"><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>Bourbon 基于 WiscKey（比 LevelDB 和 RocksDB 更快的 LSM-Tree 存储系统）实现。本文通过对 WiscKey 的实验分析，总结了五条指南。Bourbon 应用了这些指南，将 WiscKey 与学习索引相结合，利用学习索引实现快速查找。</p>
+<h2 id="设计与实现"><a href="#设计与实现" class="headerlink" title="设计与实现"></a>设计与实现</h2><h3 id="Five-learning-guidelines"><a href="#Five-learning-guidelines" class="headerlink" title="Five learning guidelines"></a>Five learning guidelines</h3><ol>
+<li>Favor learning files at lower levels (生命周期更长)</li>
+<li>Wait before learning a file (连续的 compaction 会在每一层生成生命周期非常短的新文件)</li>
+<li>Do not neglect files at higher levels (可以提供多种内部查询方式)</li>
+<li>Be workload- and data-aware (在不同的场景中查找会有很大差异)</li>
+<li>Do not learn levels for write-heavy workloads (变化很快)</li>
+</ol>
+<h3 id="Beneficial-regimes"><a href="#Beneficial-regimes" class="headerlink" title="Beneficial regimes"></a>Beneficial regimes</h3><div align="center">
+<img src="/2021/09/20/From-WiscKey-to-Bourbon-A-Learned-Index-for-Log-Structured-Merge-Trees/1.png" style="zoom:100%;">
+</div>
+
+<p>学习索引只能缩短检索时间。</p>
+<h3 id="Bourbon-Learning"><a href="#Bourbon-Learning" class="headerlink" title="Bourbon Learning"></a>Bourbon Learning</h3><div align="center">
+<img src="/2021/09/20/From-WiscKey-to-Bourbon-A-Learned-Index-for-Log-Structured-Merge-Trees/2.png" style="zoom:100%;">
+</div>
+
+<p>Bourbon 使用分段线性回归（PLR）对数据进行建模，PLR 在学习和查找过程中开销较低，而且空间开销也很小。Bourbon 可以学习单个 SSTables文件（File Learning）或整个层级（Level Learning）。层级学习对于只读工作负载收益更高，而对于混合工作负载，层级学习的性能不如文件学习。</p>
+<p>为了训练 PLR 模型，Bourbon 使用了 Greedy-PLR 算法，一次处理一个数据点，如果数据点不能在不超出定义的误差限制的情况下被添加到当前的线段中，那么将创建一个新的线段，并将数据点添加到其中，最终 Greedy-PLR 生成了一组代表数据的线段。Greedy-PLR 的运行时间与数据点的数量呈线性关系。</p>
+<h3 id="Cost-benefit-analyzer-CBA"><a href="#Cost-benefit-analyzer-CBA" class="headerlink" title="Cost-benefit analyzer (CBA)"></a>Cost-benefit analyzer (CBA)</h3><p>成本效益分析（Cost-Benefit Analyzer, CBA）的目的是过滤掉不值得学习的生命周期较短的文件。CBA 在同一层级使用之前文件的统计信息。</p>
+<p>为了过滤短生命周期文件，Bourbon 在学习文件之前会等待一个时间阈值 $T_{wait}$。对一个文件进行学习的最大耗时约为 40 毫秒，因此 Bourbon 将 $T_{wait}$ 设置为 50 毫秒。但是，学习一个长期存在的文件也可能没有好处。作者实验发现更低层级的文件通常寿命更长，对于有的工作负载和数据集，他们服务的查询操作比更高层级的文件要少得多。因此，除了考虑模型对应的开销以外，还需要考虑模型可能带来的收益。如果一个模型的收益（$B_{model}$）大于构建该模型的开销（$C_{model}$），那么该模型就是有利的。</p>
+<h4 id="Estimating-the-cost-C-model"><a href="#Estimating-the-cost-C-model" class="headerlink" title="Estimating the cost ($C_{model}$)"></a>Estimating the cost ($C_{model}$)</h4><p>如果假定学习过程发生在后台（有很多空闲的 core），那么 $C_{model}$ 开销就为 0。不过 Bourbon 采取了保守的做法，假设学习线程会对系统产生干扰，导致性能变慢。因此，论文将 $C_{model}$ 开销定义为与 $T_{build}$ 相等，即文件训练 PLR 模型的时间。由于 $T_{build}$ 与文件中数据点的数量成线性比例，我们将 $T_{build}$ 定义为文件中数据点的数量与训练一个数据点的平均时间的乘积。</p>
+<h4 id="Estimating-the-benefit-B-model"><a href="#Estimating-the-benefit-B-model" class="headerlink" title="Estimating the benefit ($B_{model}$)"></a>Estimating the benefit ($B_{model}$)</h4><p>Bourbon 定义模型带来的收益如下:</p>
+<p>$$<br>B_{model} = (T_b - T_m) * N<br>$$</p>
+<ul>
+<li>$T_{b}$: 在基线中查找的平均时间</li>
+<li>$T_{m}$: 在模型路径中查找的平均时间</li>
+<li>$N$: 文件在其生命周期内的查找次数</li>
+</ul>
+<p>然后又将查询操作又划分成了 negative 和 positive，因为大多数 negative 的查询操作在 filter 处就终止了，所以最终的收益模型为:</p>
+<p>$$<br>B_{model} = ((T_{n.b} - T_{n.m}) * N_n) + ((T_{p.b} - T_{p.m}) * N_p)<br>$$</p>
+<ul>
+<li>$N_{n}$ &amp; $N_{p}$: negative 和 positive 的查询数量</li>
+<li>$T_{n.b}$ &amp; $T_{p.b}$: 在基线中 negative 和 positive 查找的平均时间</li>
+<li>$T_{n.m}$ &amp; $T_{p.m}$: 在模型路径中 negative 和 positive 查找的平均时间</li>
+</ul>
+<p>为了估计查找次数（$N_{n}$ &amp; $N_{p}$）和查找所需时间（$T_{n.b}$ &amp; $T_{p.b}$），CBA 维护了这些文件在其生命周期内和在同一层级上的文件的统计信息（因为统计信息在不同层级之间存在显著差异）。</p>
+<p>这些估算在 $T_{wait}$ 期间完成:</p>
+<ul>
+<li>$T_{n.b}$ &amp; $T_{p.b}$: 在 $T_{wait}$ 期间，查询将通过基线路径，这些查询时间用于估计 $T_{n.b}$ 和 $T_{p.b}$</li>
+<li>$T_{n.m}$ &amp; $T_{p.m}$: 通过同一层级所有其他文件的平均值进行估计</li>
+<li>$N_{n}$ &amp; $N_{p}$: CBA 首先获取该层级中其他文件的平均 negative 查找和 positive 查找，然后，将其按 $f = s / s’$ 的倍数进行缩放，其中 $s$ 是文件的大小，$s’$ 是该层级的文件的平均大小</li>
+</ul>
+<p>如果 $C_{model} &lt; B_{model}$，文件将会开始训练。如果多个文件同时开始训练，则将它们放在一个最大优先级队列中，从而使收益最大的文件能够先被训练。</p>
+<p>未来可能的改进方向包括：</p>
+<ol>
+<li>对 $N_{n}$, $N_{p}$, $T_{n.m}$, $T_{p.m}$ 进行更精确的估计</li>
+<li>改进计算 $C_{model}$ 开销的方法，使其不仅仅是 $T_{build}$</li>
+<li>使用另外的函数对训练队列进行排序，而非 $B_{model} - C_{model}$</li>
+</ol>
+<h3 id="Bourbon-Putting-it-All-Together"><a href="#Bourbon-Putting-it-All-Together" class="headerlink" title="Bourbon: Putting it All Together"></a>Bourbon: Putting it All Together</h3><div align="center">
+<img src="/2021/09/20/From-WiscKey-to-Bourbon-A-Learned-Index-for-Log-Structured-Merge-Trees/3.png" style="zoom:100%;">
+</div>
+
+<h2 id="评估"><a href="#评估" class="headerlink" title="评估"></a>评估</h2><div align="center">
+<img src="/2021/09/20/From-WiscKey-to-Bourbon-A-Learned-Index-for-Log-Structured-Merge-Trees/4.png" style="zoom:100%;">
+</div>
+
+<div align="center">
+<img src="/2021/09/20/From-WiscKey-to-Bourbon-A-Learned-Index-for-Log-Structured-Merge-Trees/5.png" style="zoom:100%;">
+</div>
+
+<div align="center">
+<img src="/2021/09/20/From-WiscKey-to-Bourbon-A-Learned-Index-for-Log-Structured-Merge-Trees/6.png" style="zoom:100%;">
+</div>
+
+<div align="center">
+<img src="/2021/09/20/From-WiscKey-to-Bourbon-A-Learned-Index-for-Log-Structured-Merge-Trees/7.png" style="zoom:100%;">
+</div>
+
+<div align="center">
+<img src="/2021/09/20/From-WiscKey-to-Bourbon-A-Learned-Index-for-Log-Structured-Merge-Trees/8.png" style="zoom:100%;">
+</div>
+
+<div align="center">
+<img src="/2021/09/20/From-WiscKey-to-Bourbon-A-Learned-Index-for-Log-Structured-Merge-Trees/9.png" style="zoom:100%;">
+</div>
+
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://www.usenix.org/system/files/osdi20-dai_0.pdf">From WiscKey to Bourbon: A Learned Index for Log-Structured Merge Trees</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=EUxEx5hwLXk">Presentation video at OSDI ‘20</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.usenix.org/sites/default/files/conference/protected-files/osdi20_slides_dai.pdf">Presentation slides at OSDI ‘20</a></li>
+</ol>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2021-08-09T05:19:49.000Z" title="2021-8-9 13:19:49">2021-08-09</time>发表</span><span class="level-item"><time dateTime="2021-08-09T09:07:42.682Z" title="2021-8-9 17:07:42">2021-08-09</time>更新</span><span class="level-item">16 分钟读完 (大约2373个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2021/08/09/Octopus-an-RDMA-enabled-Distributed-Persistent-Memory-File-System/">Octopus: an RDMA-enabled Distributed Persistent Memory File System</a></h1><div class="content"><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Octopus 通过 NVM + RDMA 实现了分布式文件系统，主要贡献总结如下：</p>
 <ul>
 <li>提出了基于 RDMA 的新型 I/O 流，它直接访问持久化共享内存池，而无需经过文件系统层层调用，并在客户端主动获取或发送数据以重新平衡服务器和网络负载。</li>
 <li>利用 RDMA 原语重新设计元数据机制，包括自标识元数据 RPC 来用于低延迟通知，以及收集-调度分布式事务实现低一致性开销。</li>
@@ -593,100 +678,7 @@
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
 <li>Ian Rae, Eric Rollins, Jeff Shute, Sukhdeep Sodhi and Radek Vingralek, Online, Asynchronous Schema Change in F1, VLDB 2013.</li>
 </ol>
-</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2021-02-08T16:00:00.000Z" title="2021-2-9 00:00:00">2021-02-09</time>发表</span><span class="level-item"><time dateTime="2021-02-08T19:48:00.033Z" title="2021-2-9 03:48:00">2021-02-09</time>更新</span><span class="level-item">14 分钟读完 (大约2065个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2021/02/09/Google-Percolator/">Google Percolator</a></h1><div class="content"><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>Percolator 事务模型是 Google 内部用于 Web 索引更新的业务提出的分布式事务协议，构建在 BigTable 之上，总体来说就是一个经过优化的二阶段提交的实现。使用基于 Percolator 的增量处理系统代替原有的批处理索引系统后，Google 在处理同样数据量的文档时，将文档的平均搜索延时降低了50%。</p>
-<h2 id="2PC"><a href="#2PC" class="headerlink" title="2PC"></a>2PC</h2><p>传统的 2PC 简单描述一下就是两步：</p>
-<ol>
-<li>发起事务：事务管理器会发出 Prepare 请求，要求参与者记录日志，进行资源的检查和锁定</li>
-<li>确认/取消事务：当请求得到所有参与者的成功确认后，事务管理器会发出 Commit 请求，执行真正的操作；如果第一步中只要有一个执行者返回失败，则取消事务</li>
-</ol>
-<p>这样会有两个问题，一个就是<strong>单点故障</strong>：如果事务管理器发生故障，数据库会一直阻塞下去。尤其是在第二阶段发生故障的话，所有参与者还都处于锁定事务资源的状态中，从而无法继续完成事务操作；另一个就是存在<strong>数据不一致</strong>的情况：在第二阶段，当事务管理器向参与者发送 Commit 请求之后，发生了局部网络异常，导致只有部分参与者接收到请求，但是其他参与者未接到请求所以无法提交事务，整个系统就会出现数据不一致性的现象。</p>
-<h2 id="Percolator-事务流程"><a href="#Percolator-事务流程" class="headerlink" title="Percolator 事务流程"></a>Percolator 事务流程</h2><p>Percolator 事务是一个经过优化的 2PC 的实现，进行了一个二级锁的优化，也分为两个阶段：预写（Pre-write）和提交（Commit）。另外，所有启用了 Percolator 事务的表中，每一个 Column Family 都会预先增加两个列，分别是：</p>
-<ul>
-<li>lock：存储事务过程中的锁信息</li>
-<li>write：存储当前行可见（最近一次提交）的版本号</li>
-</ul>
-<p>另外，为了简化场景，假设存储用户数据的列只有一个，名为 data。</p>
-<h2 id="Pre-write"><a href="#Pre-write" class="headerlink" title="Pre-write"></a>Pre-write</h2><ol>
-<li><p>客户端从 TSO 获取时间戳，记为 start_ts，并向 Percolator Worker 发起 Pre-write 请求。</p>
-</li>
-<li><p>在该事务包含的所有写操作中选取一个作为主（primary）操作，其余的作为次（secondary）操作。主操作将作为整个事务的互斥点，标记事务的状态。</p>
-</li>
-<li><p>先预写主操作，成功后再预写次操作。在预写过程中，对每一个写操作都要执行检查：</p>
-<ul>
-<li>检查写入的行对应的 lock 列是否有锁，如果有，说明其他事务正在写，直接取消整个事务</li>
-<li>检查写入的行对应的 write 列版本号是否晚于 start_ts，如果是，说明有版本冲突，直接取消整个事务</li>
-</ul>
-</li>
-<li><p>检查通过后，以 start_ts 作为版本号将数据写入 data 列，对操作行加锁，即更新 lock 列的锁信息：主操作行的 lock 直接标为primary，次操作行的 lock 则标为主操作行的键和列名。不更新write列，亦即此时写入的数据仍然不可见。</p>
-</li>
-</ol>
-<h2 id="Commit"><a href="#Commit" class="headerlink" title="Commit"></a>Commit</h2><ol>
-<li><p>客户端从 TSO 获取时间戳，记为 commit_ts，并向 Percolator Worker 发起 Commit 请求。</p>
-</li>
-<li><p>检查主操作行对应的 lock 列所在的 primary 标记是否存在，如果不存在则失败，取消事务；如果存在则继续。</p>
-</li>
-<li><p>以 commit_ts 作为版本号，将 start_ts 更新到 write 列中。也就是说在本阶段完成后，预写阶段写入的数据将会可见。</p>
-</li>
-<li><p>对该行解锁，即删除 lock 列的 primary 信息。</p>
-</li>
-<li><p>若步骤 1~4 均成功，说明主操作行成功，代表整个事务实际上已经提交。接下来更新每个 secondary 即可，即重复步骤3、4的更新 write 列和清除 lock 列操作。secondary 的 commit 是可以异步进行的，只是在异步提交进行的过程中，如果此时有读请求，可能会需要做一下锁的清理工作。</p>
-</li>
-</ol>
-<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><p>银行转账，Bob 向 Joe 转账 7 元。该事务于 start_ts=7 开始，commit_ts=8 结束，Key 为 Bob 和 Joe 的行可能在不同的分片上。具体过程如下：</p>
-<ol>
-<li>首先查询 write 列获取最新时间戳数据，获取到 data@5，然后从 data 列里面获取时间戳为 5 的数据，初始状态下，Bob 的帐户下有 10，Joe 的帐户下有 2。</li>
-</ol>
-<img src="/2021/02/09/Google-Percolator/1.png" style="zoom:100%;">
-
-<ol start="2">
-<li>事务开始，获取 start_ts=7 作为当前事务的开始时间戳，将 Bob 行选为本事务的 primary，通过写入 lock 列锁定 Bob 的帐户，同时将数据 7:$3 写入到 data 列。</li>
-</ol>
-<img src="/2021/02/09/Google-Percolator/2.png" style="zoom:100%;">
-
-<ol start="3">
-<li>同样，使用 start_ts=7，将 Joe 改变后的余额写入到 data 列，当前操作作为 secondary，因此在 lock 列写入 7:<a href="mailto:&#80;&#114;&#105;&#109;&#97;&#x72;&#121;&#x40;&#66;&#111;&#x62;&#x2e;&#98;&#x61;&#108;">&#80;&#114;&#105;&#109;&#97;&#x72;&#121;&#x40;&#66;&#111;&#x62;&#x2e;&#98;&#x61;&#108;</a>（当失败时，能够快速定位到 primary 操作，并根据其状态异步清理）。</li>
-</ol>
-<img src="/2021/02/09/Google-Percolator/3.png" style="zoom:100%;">
-
-<ol start="4">
-<li>事务带着当前时间戳 commit_ts=8 进入 Commit 阶段：删除 primary 所在的 lock，并在 write 列中写入以提交时间戳作为版本号指向数据存储的一个指针 data@7。至此，读请求过来时将看到 Bob 的余额为 3。</li>
-</ol>
-<img src="/2021/02/09/Google-Percolator/4.png" style="zoom:100%;">
-
-<ol start="5">
-<li>同样，使用 commit_ts=8，依次在 secondary 操作项中写入 write 列并清理锁。</li>
-</ol>
-<img src="/2021/02/09/Google-Percolator/5.png" style="zoom:100%;">
-
-<ol start="6">
-<li>至此，整个当前 Percolator 事务已完成。</li>
-</ol>
-<img src="/2021/02/09/Google-Percolator/6.png" style="zoom:100%;">
-
-<h2 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h2><p>相比 2PC 存在的问题，来看看 Percolator 事务模型有哪些改进。</p>
-<ol>
-<li><p>单点故障<br>Percolator 通过日志和异步线程的方式弱化了这个问题。一是，Percolator 引入的异步线程可以在事务管理器宕机后，回滚各个分片上的事务，提供了善后手段，不会让分片上被占用的资源无法释放。二是，事务管理器可以用记录日志的方式使自身无状态化，日志通过共识算法同时保存在系统的多个节点上。这样，事务管理器宕机后，可以在其他节点启动新的事务管理器，基于日志恢复事务操作。</p>
-</li>
-<li><p>数据不一致<br>2PC 的一致性问题主要缘自第二阶段，不能确保事务管理器与多个参与者的通讯始终正常。但在 Percolator 的第二阶段，事务管理器只需要与 primary 操作所在的一个节点通讯，这个 Commit 操作本身就是原子的。所以，事务的状态自然也是原子的，一致性问题被完美解决了。</p>
-</li>
-</ol>
-<h2 id="Snapshot-Isolation"><a href="#Snapshot-Isolation" class="headerlink" title="Snapshot Isolation"></a>Snapshot Isolation</h2><p>传统关系型数据库中定义的隔离级别有4种（RU、RC、RR、S），而 Percolator 事务模型提供的隔离级别是快照隔离（Snapshot Isolation, SI），它也是与 MVCC 相辅相成的。SI的优点是：</p>
-<ul>
-<li>对于读操作，保证能够从时间戳/版本号指定的稳定快照获取，不会发生幻读</li>
-<li>对于写操作，保证在多个事务并发写同一条记录时，最多只有一个会提交成功</li>
-</ul>
-<img src="/2021/02/09/Google-Percolator/7.jpg" style="zoom:100%;">
-
-<p>如图，基于快照隔离的事务，开始于 start timestamp（图内为小空格），结束于 commit timestamp（图内为小黑球）。本例包含以下信息：</p>
-<ol>
-<li>txn_2 不能看到 txn_1 的提交信息，因为 txn_2 的开始时间戳 start timestamp 小于 txn_1 的提交时间戳 commit timestamp</li>
-<li>txn_3 可以看到 txn_2 和 txn_1 的提交信息</li>
-<li>txn_1 和 txn_2 并发执行：如果它们对同一条记录进行写入，至少有一个会失败</li>
-</ol>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
-<li>Peng D, Dabek F, Inc G . “Large-scale Incremental Processing Using Distributed Transactions and Notifications” (2010).</li>
-</ol>
-</div></article></div><nav class="pagination" role="navigation" aria-label="pagination"><div class="pagination-previous is-invisible is-hidden-mobile"><a href="/page/0/">上一页</a></div><div class="pagination-next"><a href="/page/2/">下一页</a></div><ul class="pagination-list is-hidden-mobile"><li><a class="pagination-link is-current" href="/">1</a></li><li><a class="pagination-link" href="/page/2/">2</a></li></ul></nav></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="/img/dog.png" alt="Iggie Wang (王亮)"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">Iggie Wang (王亮)</p><p class="is-size-6 is-block">CS, Wuhan University</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>Wuhan, China</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives"><p class="title">17</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分类</p><a href="/categories"><p class="title">0</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">标签</p><a href="/tags"><p class="title">7</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/hey-kong" target="_blank" rel="noopener">关注我</a></div></div></div><!--!--><div class="card widget" data-type="links"><div class="card-content"><div class="menu"><h3 class="menu-label">链接</h3><ul class="menu-list"><li><a class="level is-mobile" href="https://github.com/hey-kong" target="_blank" rel="noopener"><span class="level-left"><span class="level-item">Github</span></span><span class="level-right"><span class="level-item tag">github.com</span></span></a></li><li><a class="level is-mobile" href="iggiewang@gmail.com" target="_blank" rel="noopener"><span class="level-left"><span class="level-item">Email</span></span><span class="level-right"><span class="level-item tag">iggiewang@gmail.com</span></span></a></li></ul></div></div></div><!--!--><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-08-09T05:19:49.000Z">2021-08-09</time></p><p class="title"><a href="/2021/08/09/Octopus-an-RDMA-enabled-Distributed-Persistent-Memory-File-System/">Octopus: an RDMA-enabled Distributed Persistent Memory File System</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-07-28T15:20:51.000Z">2021-07-28</time></p><p class="title"><a href="/2021/07/28/RDMA-%E5%9F%BA%E7%A1%80/">RDMA 基础</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-07-13T09:09:37.000Z">2021-07-13</time></p><p class="title"><a href="/2021/07/13/Optimization-of-Common-Table-Expressions-in-MPP-Database-Systems-%E6%A6%82%E8%BF%B0/">Optimization of Common Table Expressions in MPP Database Systems 概述</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-05-06T06:03:34.000Z">2021-05-06</time></p><p class="title"><a href="/2021/05/06/WiscKey-Separating-Keys-from-Values-in-SSD-conscious-Storage/">WiscKey: Separating Keys from Values in SSD-conscious Storage</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-04-05T08:33:37.000Z">2021-04-05</time></p><p class="title"><a href="/2021/04/05/RocksDB-WriteImpl-%E6%B5%81%E7%A8%8B/">RocksDB WriteImpl 流程</a></p></div></article></div></div><div class="card widget" data-type="archives"><div class="card-content"><div class="menu"><h3 class="menu-label">归档</h3><ul class="menu-list"><li><a class="level is-mobile" href="/archives/2021/08/"><span class="level-start"><span class="level-item">八月 2021</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2021/07/"><span class="level-start"><span class="level-item">七月 2021</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/archives/2021/05/"><span class="level-start"><span class="level-item">五月 2021</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2021/04/"><span class="level-start"><span class="level-item">四月 2021</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2021/03/"><span class="level-start"><span class="level-item">三月 2021</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2021/02/"><span class="level-start"><span class="level-item">二月 2021</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/archives/2021/01/"><span class="level-start"><span class="level-item">一月 2021</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li></ul></div></div></div><div class="card widget" data-type="tags"><div class="card-content"><div class="menu"><h3 class="menu-label">标签</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/CSAPP/"><span class="tag">CSAPP</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Cache/"><span class="tag">Cache</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Database/"><span class="tag">Database</span><span class="tag">6</span></a></div><div class="control"><a class="tags has-addons" href="/tags/File-System/"><span class="tag">File System</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Key-Value-Store/"><span class="tag">Key-Value Store</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/RDMA/"><span class="tag">RDMA</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Rocksdb/"><span class="tag">Rocksdb</span><span class="tag">3</span></a></div></div></div></div></div><div class="card widget" data-type="subscribe-email"><div class="card-content"><div class="menu"><h3 class="menu-label">订阅更新</h3><form action="https://feedburner.google.com/fb/a/mailverify" method="post" target="popupwindow" onsubmit="window.open(&#039;https://feedburner.google.com/fb/a/mailverify?uri=&#039;,&#039;popupwindow&#039;,&#039;scrollbars=yes,width=550,height=520&#039;);return true"><input type="hidden" value="" name="uri"><input type="hidden" name="loc" value="en_US"><div class="field has-addons"><div class="control has-icons-left is-expanded"><input class="input" name="email" type="email" placeholder="Email"><span class="icon is-small is-left"><i class="fas fa-envelope"></i></span></div><div class="control"><input class="button" type="submit" value="订阅"></div></div></form></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/">Iggie Wang&#039;s Cyberspace</a><p class="is-size-7"><span>&copy; 2021 王亮</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p><a class="is-block mb-2" target="_blank" rel="noopener" href="http://beian.miit.gov.cn/">湘ICP备2021001315号</a></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-CN");</script><script>var IcarusThemeSettings = {
+</div></article></div><nav class="pagination" role="navigation" aria-label="pagination"><div class="pagination-previous is-invisible is-hidden-mobile"><a href="/page/0/">上一页</a></div><div class="pagination-next"><a href="/page/2/">下一页</a></div><ul class="pagination-list is-hidden-mobile"><li><a class="pagination-link is-current" href="/">1</a></li><li><a class="pagination-link" href="/page/2/">2</a></li></ul></nav></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="/img/dog.png" alt="Iggie Wang (王亮)"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">Iggie Wang (王亮)</p><p class="is-size-6 is-block">CS, Wuhan University</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>Wuhan, China</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives"><p class="title">18</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分类</p><a href="/categories"><p class="title">0</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">标签</p><a href="/tags"><p class="title">7</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/hey-kong" target="_blank" rel="noopener">关注我</a></div></div></div><!--!--><div class="card widget" data-type="links"><div class="card-content"><div class="menu"><h3 class="menu-label">链接</h3><ul class="menu-list"><li><a class="level is-mobile" href="https://github.com/hey-kong" target="_blank" rel="noopener"><span class="level-left"><span class="level-item">Github</span></span><span class="level-right"><span class="level-item tag">github.com</span></span></a></li><li><a class="level is-mobile" href="iggiewang@gmail.com" target="_blank" rel="noopener"><span class="level-left"><span class="level-item">Email</span></span><span class="level-right"><span class="level-item tag">iggiewang@gmail.com</span></span></a></li></ul></div></div></div><!--!--><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-09-20T06:13:26.000Z">2021-09-20</time></p><p class="title"><a href="/2021/09/20/From-WiscKey-to-Bourbon-A-Learned-Index-for-Log-Structured-Merge-Trees/">From WiscKey to Bourbon: A Learned Index for Log-Structured Merge Trees</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-08-09T05:19:49.000Z">2021-08-09</time></p><p class="title"><a href="/2021/08/09/Octopus-an-RDMA-enabled-Distributed-Persistent-Memory-File-System/">Octopus: an RDMA-enabled Distributed Persistent Memory File System</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-07-28T15:20:51.000Z">2021-07-28</time></p><p class="title"><a href="/2021/07/28/RDMA-%E5%9F%BA%E7%A1%80/">RDMA 基础</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-07-13T09:09:37.000Z">2021-07-13</time></p><p class="title"><a href="/2021/07/13/Optimization-of-Common-Table-Expressions-in-MPP-Database-Systems-%E6%A6%82%E8%BF%B0/">Optimization of Common Table Expressions in MPP Database Systems 概述</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-05-06T06:03:34.000Z">2021-05-06</time></p><p class="title"><a href="/2021/05/06/WiscKey-Separating-Keys-from-Values-in-SSD-conscious-Storage/">WiscKey: Separating Keys from Values in SSD-conscious Storage</a></p></div></article></div></div><div class="card widget" data-type="archives"><div class="card-content"><div class="menu"><h3 class="menu-label">归档</h3><ul class="menu-list"><li><a class="level is-mobile" href="/archives/2021/09/"><span class="level-start"><span class="level-item">九月 2021</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2021/08/"><span class="level-start"><span class="level-item">八月 2021</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2021/07/"><span class="level-start"><span class="level-item">七月 2021</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/archives/2021/05/"><span class="level-start"><span class="level-item">五月 2021</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2021/04/"><span class="level-start"><span class="level-item">四月 2021</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2021/03/"><span class="level-start"><span class="level-item">三月 2021</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2021/02/"><span class="level-start"><span class="level-item">二月 2021</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/archives/2021/01/"><span class="level-start"><span class="level-item">一月 2021</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li></ul></div></div></div><div class="card widget" data-type="tags"><div class="card-content"><div class="menu"><h3 class="menu-label">标签</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/CSAPP/"><span class="tag">CSAPP</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Cache/"><span class="tag">Cache</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Database/"><span class="tag">Database</span><span class="tag">6</span></a></div><div class="control"><a class="tags has-addons" href="/tags/File-System/"><span class="tag">File System</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Key-Value-Store/"><span class="tag">Key-Value Store</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/RDMA/"><span class="tag">RDMA</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Rocksdb/"><span class="tag">Rocksdb</span><span class="tag">3</span></a></div></div></div></div></div><div class="card widget" data-type="subscribe-email"><div class="card-content"><div class="menu"><h3 class="menu-label">订阅更新</h3><form action="https://feedburner.google.com/fb/a/mailverify" method="post" target="popupwindow" onsubmit="window.open(&#039;https://feedburner.google.com/fb/a/mailverify?uri=&#039;,&#039;popupwindow&#039;,&#039;scrollbars=yes,width=550,height=520&#039;);return true"><input type="hidden" value="" name="uri"><input type="hidden" name="loc" value="en_US"><div class="field has-addons"><div class="control has-icons-left is-expanded"><input class="input" name="email" type="email" placeholder="Email"><span class="icon is-small is-left"><i class="fas fa-envelope"></i></span></div><div class="control"><input class="button" type="submit" value="订阅"></div></div></form></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/">Iggie Wang&#039;s Cyberspace</a><p class="is-size-7"><span>&copy; 2021 王亮</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p><a class="is-block mb-2" target="_blank" rel="noopener" href="http://beian.miit.gov.cn/">湘ICP备2021001315号</a></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-CN");</script><script>var IcarusThemeSettings = {
             article: {
                 highlight: {
                     clipboard: true,
@@ -728,6 +720,22 @@
                 }
                 $('.justified-gallery').justifiedGallery();
             }
-        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+        });</script><!--!--><!--!--><script type="text/x-mathjax-config">MathJax.Hub.Config({
+            'HTML-CSS': {
+                matchFontHeight: false
+            },
+            SVG: {
+                matchFontHeight: false
+            },
+            CommonHTML: {
+                matchFontHeight: false
+            },
+            tex2jax: {
+                inlineMath: [
+                    ['$','$'],
+                    ['\\(','\\)']
+                ]
+            }
+        });</script><script src="https://cdnjs.loli.net/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" defer></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
             loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
         });</script></body></html>
