@@ -197,10 +197,31 @@
     
   </url>
   
+  <url>
+    <loc>https://www.iggiewang.cn/2022/02/25/KubeEdge-%E8%BE%B9%E7%BC%98%E9%83%A8%E5%88%86-DeviceTwin-%E7%AE%80%E6%9E%90/</loc>
+    
+    <lastmod>2022-02-25</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.iggiewang.cn/2022/02/25/KubeEdge-%E8%BE%B9%E7%BC%98%E9%83%A8%E5%88%86-EdgeHub-%E7%AE%80%E6%9E%90/</loc>
+    
+    <lastmod>2022-02-25</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.iggiewang.cn/2022/02/25/KubeEdge-%E8%BE%B9%E7%BC%98%E9%83%A8%E5%88%86-MetaManager-%E7%AE%80%E6%9E%90/</loc>
+    
+    <lastmod>2022-02-25</lastmod>
+    
+  </url>
+  
 
   <url>
     <loc>https://www.iggiewang.cn/</loc>
-    <lastmod>2022-02-24</lastmod>
+    <lastmod>2022-02-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -208,84 +229,84 @@
   
   <url>
     <loc>https://www.iggiewang.cn/tags/CSAPP/</loc>
-    <lastmod>2022-02-24</lastmod>
+    <lastmod>2022-02-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://www.iggiewang.cn/tags/File-System/</loc>
-    <lastmod>2022-02-24</lastmod>
+    <lastmod>2022-02-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://www.iggiewang.cn/tags/Database/</loc>
-    <lastmod>2022-02-24</lastmod>
+    <lastmod>2022-02-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://www.iggiewang.cn/tags/Rocksdb/</loc>
-    <lastmod>2022-02-24</lastmod>
+    <lastmod>2022-02-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://www.iggiewang.cn/tags/Key-Value-Store/</loc>
-    <lastmod>2022-02-24</lastmod>
+    <lastmod>2022-02-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://www.iggiewang.cn/tags/Cache/</loc>
-    <lastmod>2022-02-24</lastmod>
+    <lastmod>2022-02-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://www.iggiewang.cn/tags/RDMA/</loc>
-    <lastmod>2022-02-24</lastmod>
+    <lastmod>2022-02-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://www.iggiewang.cn/tags/Learned-Index/</loc>
-    <lastmod>2022-02-24</lastmod>
+    <lastmod>2022-02-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://www.iggiewang.cn/tags/k8s/</loc>
-    <lastmod>2022-02-24</lastmod>
+    <lastmod>2022-02-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://www.iggiewang.cn/tags/docker/</loc>
-    <lastmod>2022-02-24</lastmod>
+    <lastmod>2022-02-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://www.iggiewang.cn/tags/etcd/</loc>
-    <lastmod>2022-02-24</lastmod>
+    <lastmod>2022-02-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://www.iggiewang.cn/tags/KubeEdge/</loc>
-    <lastmod>2022-02-24</lastmod>
+    <lastmod>2022-02-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
