@@ -2,27 +2,6 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://www.iggiewang.cn/2021/09/20/From-WiscKey-to-Bourbon-A-Learned-Index-for-Log-Structured-Merge-Trees/</loc>
-    
-    <lastmod>2021-10-04</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.iggiewang.cn/2021/10/01/ALEX-An-Updatable-Adaptive-Learned-Index/</loc>
-    
-    <lastmod>2021-10-01</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.iggiewang.cn/2021/08/09/Octopus-an-RDMA-enabled-Distributed-Persistent-Memory-File-System/</loc>
-    
-    <lastmod>2021-08-09</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://www.iggiewang.cn/2021/01/16/About-me/</loc>
     
     <lastmod>2021-08-07</lastmod>
@@ -30,23 +9,37 @@
   </url>
   
   <url>
-    <loc>https://www.iggiewang.cn/2021/07/28/RDMA-%E5%9F%BA%E7%A1%80/</loc>
+    <loc>https://www.iggiewang.cn/2021/01/21/Attack-Lab/</loc>
     
-    <lastmod>2021-07-28</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.iggiewang.cn/2021/07/13/Optimization-of-Common-Table-Expressions-in-MPP-Database-Systems-%E6%A6%82%E8%BF%B0/</loc>
-    
-    <lastmod>2021-07-15</lastmod>
+    <lastmod>2021-01-21</lastmod>
     
   </url>
   
   <url>
-    <loc>https://www.iggiewang.cn/2021/05/06/WiscKey-Separating-Keys-from-Values-in-SSD-conscious-Storage/</loc>
+    <loc>https://www.iggiewang.cn/2021/01/30/Google-File-System/</loc>
     
-    <lastmod>2021-05-06</lastmod>
+    <lastmod>2021-01-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.iggiewang.cn/2021/02/07/Learning-to-Optimize-Join-Queries-With-Deep-Reinforcement-Learning/</loc>
+    
+    <lastmod>2021-02-07</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.iggiewang.cn/2021/02/09/Google-Percolator/</loc>
+    
+    <lastmod>2021-02-08</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.iggiewang.cn/2021/02/13/Online-Asynchronous-Schema-Change-in-F1/</loc>
+    
+    <lastmod>2021-02-13</lastmod>
     
   </url>
   
@@ -54,6 +47,41 @@
     <loc>https://www.iggiewang.cn/2021/04/05/RocksDB-WriteImpl-%E6%B5%81%E7%A8%8B/</loc>
     
     <lastmod>2021-04-05</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.iggiewang.cn/2021/01/17/Rocksdb-Get/</loc>
+    
+    <lastmod>2021-01-17</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.iggiewang.cn/2021/07/13/Optimization-of-Common-Table-Expressions-in-MPP-Database-Systems-%E6%A6%82%E8%BF%B0/</loc>
+    
+    <lastmod>2021-07-13</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.iggiewang.cn/2021/02/16/TiDB-%E6%9E%B6%E6%9E%84/</loc>
+    
+    <lastmod>2021-02-16</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.iggiewang.cn/2021/01/18/Rocksdb-Cache/</loc>
+    
+    <lastmod>2021-01-18</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.iggiewang.cn/2021/05/06/WiscKey-Separating-Keys-from-Values-in-SSD-conscious-Storage/</loc>
+    
+    <lastmod>2021-05-06</lastmod>
     
   </url>
   
@@ -67,49 +95,7 @@
   <url>
     <loc>https://www.iggiewang.cn/2021/02/21/%E7%BC%93%E5%AD%98%E8%AE%BE%E8%AE%A1/</loc>
     
-    <lastmod>2021-02-24</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.iggiewang.cn/2021/02/16/TiDB-%E6%9E%B6%E6%9E%84/</loc>
-    
-    <lastmod>2021-02-16</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.iggiewang.cn/2021/02/13/Online-Asynchronous-Schema-Change-in-F1/</loc>
-    
-    <lastmod>2021-02-13</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.iggiewang.cn/2021/02/09/Google-Percolator/</loc>
-    
-    <lastmod>2021-02-08</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.iggiewang.cn/2021/02/07/Learning-to-Optimize-Join-Queries-With-Deep-Reinforcement-Learning/</loc>
-    
-    <lastmod>2021-02-07</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.iggiewang.cn/2021/01/30/Google-File-System/</loc>
-    
-    <lastmod>2021-01-30</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.iggiewang.cn/2021/01/21/Attack-Lab/</loc>
-    
-    <lastmod>2021-01-21</lastmod>
+    <lastmod>2021-02-21</lastmod>
     
   </url>
   
@@ -121,16 +107,30 @@
   </url>
   
   <url>
-    <loc>https://www.iggiewang.cn/2021/01/18/Rocksdb-Cache/</loc>
+    <loc>https://www.iggiewang.cn/2021/07/28/RDMA-%E5%9F%BA%E7%A1%80/</loc>
     
-    <lastmod>2021-01-18</lastmod>
+    <lastmod>2021-07-28</lastmod>
     
   </url>
   
   <url>
-    <loc>https://www.iggiewang.cn/2021/01/17/Rocksdb-Get/</loc>
+    <loc>https://www.iggiewang.cn/2021/08/09/Octopus-an-RDMA-enabled-Distributed-Persistent-Memory-File-System/</loc>
     
-    <lastmod>2021-01-18</lastmod>
+    <lastmod>2021-08-09</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.iggiewang.cn/2021/09/20/From-WiscKey-to-Bourbon-A-Learned-Index-for-Log-Structured-Merge-Trees/</loc>
+    
+    <lastmod>2021-09-20</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.iggiewang.cn/2021/10/01/ALEX-An-Updatable-Adaptive-Learned-Index/</loc>
+    
+    <lastmod>2021-10-01</lastmod>
     
   </url>
   
@@ -270,7 +270,7 @@
 
   <url>
     <loc>https://www.iggiewang.cn/</loc>
-    <lastmod>2023-02-16</lastmod>
+    <lastmod>2023-08-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -278,91 +278,98 @@
   
   <url>
     <loc>https://www.iggiewang.cn/tags/CSAPP/</loc>
-    <lastmod>2023-02-16</lastmod>
+    <lastmod>2023-08-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://www.iggiewang.cn/tags/File-System/</loc>
-    <lastmod>2023-02-16</lastmod>
+    <lastmod>2023-08-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://www.iggiewang.cn/tags/Database/</loc>
-    <lastmod>2023-02-16</lastmod>
+    <lastmod>2023-08-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://www.iggiewang.cn/tags/Rocksdb/</loc>
-    <lastmod>2023-02-16</lastmod>
+    <lastmod>2023-08-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://www.iggiewang.cn/tags/Key-Value-Store/</loc>
-    <lastmod>2023-02-16</lastmod>
+    <lastmod>2023-08-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://www.iggiewang.cn/tags/Cache/</loc>
-    <lastmod>2023-02-16</lastmod>
+    <lastmod>2023-08-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://www.iggiewang.cn/tags/RDMA/</loc>
-    <lastmod>2023-02-16</lastmod>
+    <lastmod>2023-08-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://www.iggiewang.cn/tags/Learned-Index/</loc>
-    <lastmod>2023-02-16</lastmod>
+    <lastmod>2023-08-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://www.iggiewang.cn/tags/k8s/</loc>
-    <lastmod>2023-02-16</lastmod>
+    <lastmod>2023-08-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://www.iggiewang.cn/tags/docker/</loc>
-    <lastmod>2023-02-16</lastmod>
+    <lastmod>2023-08-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://www.iggiewang.cn/tags/etcd/</loc>
-    <lastmod>2023-02-16</lastmod>
+    <lastmod>2023-08-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://www.iggiewang.cn/tags/KubeEdge/</loc>
-    <lastmod>2023-02-16</lastmod>
+    <lastmod>2023-08-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://www.iggiewang.cn/tags/Edge-computing/</loc>
-    <lastmod>2023-02-16</lastmod>
+    <lastmod>2023-08-01</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.iggiewang.cn/tags/Chinese/</loc>
+    <lastmod>2023-08-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
